@@ -17,18 +17,6 @@ python3 -m pip install geopandas matplotlib contextily
 brew install gdal
 ```
 
-## Script
-
-Python scripts
-
-```
-count_dbf_records.py
-
-natura2000nearest.py
-
-natura2000nearest_visualisation.py
-```
-
 ## Data
 
 Go to https://www.eea.europa.eu/data-and-maps/data/natura-14
@@ -67,6 +55,18 @@ ogrinfo --config CPL_DEBUG ON -sql "CREATE SPATIAL INDEX ON Natura2000_end2021_r
 
 ```
 ogrinfo --config CPL_DEBUG ON -sql "CREATE SPATIAL INDEX ON test" test.shp
+```
+
+## Script
+
+Python scripts
+
+```
+count_dbf_records.py
+
+natura2000nearest.py
+
+natura2000nearest_visualisation.py
 ```
 
 ## Run

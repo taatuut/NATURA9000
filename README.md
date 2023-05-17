@@ -8,26 +8,26 @@ https://en.wikipedia.org/wiki/HAL_9000
 
 Created on a MacBook Pro
 
-'''
+```
 python3 -m pip install --upgrade pip
 python3 -m pip install geopandas matplotlib contextily
-'''
+```
 
-'''
+```
 brew install gdal
-'''
+```
 
 ## Script
 
 Python scripts
 
-'''
+```
 count_dbf_records.py
 
 natura2000nearest.py
 
 natura2000nearest_visualisation.py
-'''
+```
 
 ## Data
 

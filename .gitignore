@@ -161,11 +161,14 @@ cython_debug/
 
 
 # Custom
-data
-data/
-data/*
-data/**
-results
-results/
-results/*
-results/**
+data/**/*.cpg
+data/**/*.dbf
+data/**/*.prj
+data/**/*.qix
+data/**/*.sbn
+data/**/*.shp
+data/**/*.shx
+data/**/*.zip
+results/**/*.png
+results/**/*.csv
+

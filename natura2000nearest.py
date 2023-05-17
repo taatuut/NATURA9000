@@ -2,13 +2,13 @@ import geopandas as gpd
 import csv
 
 # Use the test shapefile
-file = "test.shp"
+file = "data/test.shp"
 # Uncomment next line to use the full Natura2000 shapefile  
-file = "Natura2000_end2021_rev1_epsg3035.shp"
+#file = "data/Natura2000_end2021_rev1_epsg3035.shp"
 shp = gpd.read_file(file)
 shp.sindex
 
-output = 'output.csv'
+output = 'results/output.csv'
 # Open the CSV file for writing (or appending)
 with open(output, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)

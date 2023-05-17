@@ -6,7 +6,7 @@ import contextily as ctx
 # Use the test shapefile
 shapefile_path = "data/test.shp"
 # Uncomment next line to use the Natura2000 shapefile
-shapefile_path = 'data/Natura2000_end2021_rev1_epsg3035.shp'
+#shapefile_path = 'data/Natura2000_end2021_rev1_epsg3035.shp'
 
 # Path to the CSV file containing the selected values
 csv_path = 'results/output.csv'

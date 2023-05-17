@@ -171,4 +171,7 @@ data/**/*.shx
 data/**/*.zip
 results/**/*.png
 results/**/*.csv
+.DS_Store
+*/.DS_Store
+**/.DS_Store
 

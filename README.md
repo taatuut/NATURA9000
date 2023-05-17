@@ -79,7 +79,7 @@ python3 natura2000nearest.py
 
 - Check 'geopandas only calculates planar distances, so with data in lat-long you will always get significant errors'. May need to convert to reproject to a projected (Equidistant?) coordinate system to get better accuracy.
 
-# Questions
+## Questions
 
 Q:
 Shapefile and OGC Geopackage. Can Geopandas handle both formats? Which one is faster?

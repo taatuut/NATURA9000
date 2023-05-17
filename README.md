@@ -84,6 +84,24 @@ python3 natura2000nearest.py
 Q:
 Shapefile and OGC Geopackage. Can Geopandas handle both formats? Which one is faster?
 
+## Notes
+
+Natura2000_end2021_rev1_Shapefile.zip 677 MB from https://www.eea.europa.eu/data-and-maps/data/natura-14
+To find out that again real life is bit more  complex. The data is in EPSG:3035 - ETRS89-extended, so should be reprojected to EPSG:4326 - WGS84 before loading into GraphDB, did you take that into account? (assuming you are using that source too). EPSG 3035 and 4326 are both in decimal degrees, and maybe calculations do even produce same results without reprojection, but that would not be the right way.
+Looks like the source data already has 4 decimals only, need to doublecheck. If that is the case then useful to check if possible to limit number of decimals in or when loading into GraphDB, or maybe the Shapefile to RDF triples tool does that? Which Greek tool is that, did not remember.
+With Shapefile COORDINATE_PRECISION does not work, can be used with geojson but as said maybe not necessary, will check.
+
+
+reprojecting to EPSG:4326 - WGS84 normally done during the indexing?
+
+You can reproject with ogr2ogr
+ogr2ogr -f "ESRI Shapefile" Natura2000_end2021_rev1_epsg4326.json -s_srs EPSG:3035 -t_srs EPSG:4326 Natura2000_end2021_rev1_epsg3035.shp
+
+
+Check this one: https://geotriples.di.uoa.gr/
+
+Not https://github.com/SLIPO-EU/TripleGeo
+
 ## Links
 
 https://mapshaper.org/

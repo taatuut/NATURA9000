@@ -33,9 +33,9 @@ Unzip Shapefile to folder `data`.
 
 ### Test
 
-The fid is internal feature id in numeric format.
+The `fid` is internal feature id in numeric format.
 
-To write specific features to a test shapefile with limited number of features using fid to select:
+To write specific features to a test shapefile with limited number of features using `fid` to select:
 
 ```
 ogr2ogr -lco ENCODING=UTF-8 -sql "SELECT * FROM Natura2000_end2021_rev1_epsg3035 WHERE fid IN (1,2,3,4,5,6,7,8,9,10)" data/test.shp data/Natura2000_end2021_rev1_epsg3035.shp
@@ -47,7 +47,7 @@ Write first x features to a test shapefile using fid:
 ogr2ogr -lco ENCODING=UTF-8 -sql "SELECT * FROM Natura2000_end2021_rev1_epsg3035 WHERE fid < 1000" data/test.shp data/Natura2000_end2021_rev1_epsg3035.shp
 ```
 
-FYI: create spatial index, qix is open source alternative for shx, not tested if geopandas uses either of these anyway so could skip this step. Also using geopandas .sindex but not assessed impact.
+FYI: to create spatial index on a Shapefile, `qix` is open source alternative for `shx`, not tested if geopandas uses either of these anyway so could skip this step. Also using geopandas `.sindex` but not assessed impact.
 
 ```
 ogrinfo --config CPL_DEBUG ON -sql "CREATE SPATIAL INDEX ON Natura2000_end2021_rev1_epsg3035" data/Natura2000_end2021_rev1_epsg3035.shp
@@ -89,7 +89,7 @@ Example visualisation of results:
 
 ## Todo
 
-- Check 'geopandas only calculates planar distances, so with data in lat-long you will always get significant errors'. May need to convert to reproject to a projected (Equidistant?) coordinate system to get better accuracy.
+- Check 'geopandas only calculates planar distances, so with data in lat-long you will always get significant errors'. May need to convert to reproject to a projected (equidistant?) coordinate system to get better accuracy.
 
 ## Questions
 
@@ -101,13 +101,7 @@ Shapefile and OGC Geopackage. Can Geopandas handle both formats? Which one is fa
 1.
 Natura2000_end2021_rev1_Shapefile.zip 677 MB from https://www.eea.europa.eu/data-and-maps/data/natura-14
 
-To find out that again real life is bit more  complex. The data is in EPSG:3035 - ETRS89-extended, so should be reprojected to EPSG:4326 - WGS84 before loading into GraphDB, did you take that into account? (assuming you are using that source too). EPSG 3035 and 4326 are both in decimal degrees, and maybe calculations do even produce same results without reprojection, but that would not be the right way.
-
-Looks like the source data already has 4 decimals only, need to doublecheck. If that is the case then useful to check if possible to limit number of decimals in or when loading into GraphDB, or maybe the Shapefile to RDF triples tool does that? Which Greek tool is that, did not remember.
-
-With Shapefile COORDINATE_PRECISION does not work, can be used with geojson but as said maybe not necessary, will check.
-
-2.
+To find out that again real life is bit more  complex. The data is in `EPSG:3035 - ETRS89-extended`, so should be reprojected to `EPSG:4326 - WGS84` for databases that only support WGS84 (like GraphDB, MongoDB, note that MarkLogic does support ETRS89). Be aware that both EPSG 3035 and 4326 are in decimal degrees, so will load into databases with WGS84 support. Maybe calculations sometimes even do produce the same results without reprojection, but that would not be the right way.
 Reprojecting to EPSG:4326 - WGS84
 
 You can reproject with `ogr2ogr`
@@ -116,8 +110,12 @@ You can reproject with `ogr2ogr`
 ogr2ogr -f "ESRI Shapefile" Natura2000_end2021_rev1_epsg4326.json -s_srs EPSG:3035 -t_srs EPSG:4326 Natura2000_end2021_rev1_epsg3035.shp
 ```
 
-3.
-Check this one: https://geotriples.di.uoa.gr/ not https://github.com/SLIPO-EU/TripleGeo
+2.
+Looks like the source data already has 4 decimals only, need to doublecheck. If that is the case then useful to check if possible to limit number of decimals in or when loading into a database, or maybe the Shapefile to RDF triples tool does that?
+
+`COORDINATE_PRECISION` is not supported for Shapefile, can be used with geojson but as said maybe not necessary, check source data decimals first.
+
+Check this Shapefile to RDF tool: https://geotriples.di.uoa.gr/, and/or this one https://github.com/SLIPO-EU/TripleGeo
 
 ## Links
 

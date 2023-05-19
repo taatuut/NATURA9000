@@ -14,7 +14,7 @@ python3 -m pip install geopandas matplotlib contextily
 ```
 
 ```
-brew install gdal
+brew install gdal watch
 ```
 
 ## Data

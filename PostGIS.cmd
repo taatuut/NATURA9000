@@ -11,6 +11,9 @@ initdb /usr/local/var/postgres
 # Start the PostgreSQL service
 pg_ctl -D /usr/local/var/postgres -l logfile start
 
+# Stop
+#pg_ctl -D /usr/local/var/postgres stop
+
 # Create a new PostgreSQL database
 createdb sensingclues
 
@@ -24,7 +27,10 @@ shp2pgsql -s 3035 -I Natura2000_end2021_rev1_epsg3035.shp Natura2000 | psql -d s
 psql -d sensingclues -c "CREATE INDEX ON Natura2000 USING gist(geom);"
 
 # Drop the Natura2000nearest table if EXISTS
-psql -d sensingclues -c "DROP TABLE IF EXISTS Natura2000nearest;"
+#psql -d sensingclues -c "DROP TABLE IF EXISTS Natura2000nearest;"
+
+# Truncate the Natura2000nearest table if EXISTS
+psql -d sensingclues -c "TRUNCATE Natura2000nearest;"
 
 # Create the Natura2000nearest table
 psql -d sensingclues -c "CREATE TABLE Natura2000nearest (SITECODE VARCHAR, nearest_neighbors VARCHAR[]);"
@@ -61,6 +67,7 @@ DECLARE
   nearest_sites VARCHAR[];
 BEGIN
   FOR rec IN SELECT SITECODE, geom FROM Natura2000 LOOP
+    RAISE NOTICE ''sc : %'', rec.SITECODE;
     nearest_sites := ARRAY(
       SELECT b.SITECODE
       FROM Natura2000 AS b
@@ -86,4 +93,4 @@ psql -d sensingclues -c "SELECT COUNT(*) FROM Natura2000nearest"
 #while :; do clear; psql -d sensingclues -c "SELECT COUNT(*) FROM Natura2000nearest"; sleep 5; done
 
 # Export the Natura2000nearest table to a CSV file named Natura2000nearest.csv
-psql -d sensingclues -c "COPY Natura2000nearest TO '/Users/emilzegers/Dropbox/Mijn Mac (MacBook Pro van Emil)/Downloads/Natura2000_end2021_rev1_Shapefile/natura2000nearest.csv' WITH (FORMAT CSV, HEADER);"
+psql -d sensingclues -c "COPY Natura2000nearest TO '/Users/emilzegers/GitHub/taatuut/NATURA9000/results/natura2000nearest.csv' WITH (FORMAT CSV, HEADER);"

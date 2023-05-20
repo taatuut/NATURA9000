@@ -168,6 +168,7 @@ data/**/*.qix
 data/**/*.sbn
 data/**/*.shp
 data/**/*.shx
+data/**/*.gpkg
 data/**/*.zip
 results/**/*.png
 results/**/*.csv

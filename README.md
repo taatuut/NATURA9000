@@ -29,7 +29,9 @@ Natura 2000 End 2021 - Shapefile
 
 Natura 2000 End 2021 - OGC Geopackage
 
-Unzip Shapefile to folder `data`.
+Unzip Shapefile and Geopackage to folder `data`.
+
+Downloaded `Natura2000_end2021_rev1_dataset_definitions.xls` to understand Geopackage contents.
 
 ### Test
 

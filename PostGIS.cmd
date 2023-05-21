@@ -120,7 +120,7 @@ DECLARE
   nearest_sites VARCHAR[];
 BEGIN
   FOR rec IN SELECT SITECODE, geom FROM naturasite_polygon LOOP
-    RAISE NOTICE ''sc : %'', rec.SITECODE;
+    RAISE NOTICE ''SITECODE : %'', rec.SITECODE;
     nearest_sites := ARRAY(
       SELECT b.SITECODE
       FROM naturasite_polygon AS b
@@ -147,3 +147,5 @@ while :; do clear; psql -d sensingclues -c "SELECT COUNT(*) FROM Natura2000neare
 
 # Export the Natura2000nearest table to a CSV file named Natura2000nearest.csv
 psql -d sensingclues -c "COPY Natura2000nearest TO '/Users/emilzegers/GitHub/taatuut/NATURA9000/results/natura2000nearest.csv' WITH (FORMAT CSV, HEADER);"
+
+# OPTIONAL: examine faster approach by rubberbanding Natura2000 polygons first, then running neareston rubberbands and compare results. Use https://postgis.net/docs/ST_ConvexHull.html

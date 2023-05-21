@@ -169,6 +169,7 @@ data/**/*.sbn
 data/**/*.shp
 data/**/*.shx
 data/**/*.gpkg
+data/**/*.xls
 data/**/*.zip
 results/**/*.png
 results/**/*.csv

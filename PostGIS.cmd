@@ -148,4 +148,7 @@ while :; do clear; psql -d sensingclues -c "SELECT COUNT(*) FROM Natura2000neare
 # Export the Natura2000nearest table to a CSV file named Natura2000nearest.csv
 psql -d sensingclues -c "COPY Natura2000nearest TO '/Users/emilzegers/GitHub/taatuut/NATURA9000/results/natura2000nearest.csv' WITH (FORMAT CSV, HEADER);"
 
+# Count lines in the CSV file named Natura2000nearest.csv
+wc -l results/natura2000nearest.csv
+
 # OPTIONAL: examine faster approach by rubberbanding Natura2000 polygons first, then running neareston rubberbands and compare results. Use https://postgis.net/docs/ST_ConvexHull.html

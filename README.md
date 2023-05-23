@@ -112,21 +112,29 @@ Load the shapefile into the table Natura2000
 NOTE: If Geopackage is not a suitable alternative, use shapefile and update the table Natura2000 with ST_MakeValid
 
 ### FOR SHAPEFILE ONLY ###
-# Create a spatial index on the Natura2000 table
-psql -d sensingclues -c "CREATE INDEX ON Natura2000 USING gist(geom);"
-# Drop the Natura2000nearest table if EXISTS
-#psql -d sensingclues -c "DROP TABLE IF EXISTS Natura2000nearest;"
-# Truncate the Natura2000nearest table if EXISTS
-psql -d sensingclues -c "TRUNCATE Natura2000nearest;"
 
-# Cannot just delete blocking records cause then nearest calculation for others is no longer correct
-# Try to fix geometry during/after loading, or simplify
-#psql -d sensingclues -c "DELETE FROM Natura2000 WHERE SITECODE IN ('SE0820434','SE0820433');"
+Create a spatial index on the Natura2000 table
+`psql -d sensingclues -c "CREATE INDEX ON Natura2000 USING gist(geom);"`
 
-# Create the Natura2000nearest table
-psql -d sensingclues -c "CREATE TABLE Natura2000nearest (SITECODE VARCHAR, nearest_neighbors VARCHAR[]);"
+Drop the Natura2000nearest table if EXISTS
 
-# Create the function to calculate nearest neighbors and insert into Natura2000nearest table
+`#psql -d sensingclues -c "DROP TABLE IF EXISTS Natura2000nearest;"`
+
+Truncate the Natura2000nearest table if EXISTS
+
+`psql -d sensingclues -c "TRUNCATE Natura2000nearest;"`
+
+Cannot just delete blocking records cause then nearest calculation for others is no longer correct. Try to fix geometry during/after loading, or simplify.
+
+`psql -d sensingclues -c "DELETE FROM Natura2000 WHERE SITECODE IN ('SE0820434','SE0820433');"`
+
+Create the Natura2000nearest table
+
+`psql -d sensingclues -c "CREATE TABLE Natura2000nearest (SITECODE VARCHAR, nearest_neighbors VARCHAR[]);"`
+
+Create the function to calculate nearest neighbors and insert into Natura2000nearest table
+
+```
 psql -d sensingclues -c "CREATE OR REPLACE FUNCTION calculate_nearest_neighbors() RETURNS INTEGER AS '
 DECLARE
   rec RECORD;
@@ -145,6 +153,7 @@ BEGIN
   SELECT 1 AS result;
 END;
 ' LANGUAGE plpgsql;"
+```
 
 Run scripts
 
@@ -160,50 +169,7 @@ Results
 results/output.csv
 ```
 
-[DEPRECATED] Switched to PostgreSQL with Shapefile
-
-Call the function to calculate nearest neighbors and insert into Natura2000nearest table
-
-`psql -d sensingclues -c "SELECT calculate_nearest_neighbors();"`
-
-# Create a spatial index on the Natura2000 table
-psql -d sensingclues -c "CREATE INDEX ON Natura2000 USING gist(geom);"
-# Drop the Natura2000nearest table if EXISTS
-#psql -d sensingclues -c "DROP TABLE IF EXISTS Natura2000nearest;"
-# Truncate the Natura2000nearest table if EXISTS
-psql -d sensingclues -c "TRUNCATE Natura2000nearest;"
-
-# Cannot just delete blocking records cause then nearest calculation for others is no longer correct
-# Try to fix geometry during/after loading, or simplify
-#psql -d sensingclues -c "DELETE FROM Natura2000 WHERE SITECODE IN ('SE0820434','SE0820433');"
-
-# Create the Natura2000nearest table
-psql -d sensingclues -c "CREATE TABLE Natura2000nearest (SITECODE VARCHAR, nearest_neighbors VARCHAR[]);"
-
-# Create the function to calculate nearest neighbors and insert into Natura2000nearest table
-psql -d sensingclues -c "CREATE OR REPLACE FUNCTION calculate_nearest_neighbors() RETURNS INTEGER AS '
-DECLARE
-  rec RECORD;
-  nearest_sites VARCHAR[];
-BEGIN
-  FOR rec IN SELECT SITECODE, geom FROM Natura2000 LOOP
-    nearest_sites := ARRAY(
-      SELECT b.SITECODE
-      FROM Natura2000 AS b
-      WHERE rec.SITECODE != b.SITECODE
-      ORDER BY rec.geom <-> b.geom
-      LIMIT 5
-    );
-    INSERT INTO Natura2000nearest (SITECODE, nearest_neighbors) VALUES (rec.SITECODE, nearest_sites);
-  END LOOP;
-  SELECT 1 AS result;
-END;
-' LANGUAGE plpgsql;"
-
-# Call the function to calculate nearest neighbors and insert into Natura2000nearest table
-psql -d sensingclues -c "SELECT calculate_nearest_neighbors();"
-
-### PostgreSQL/PostGIS
+## PostgreSQL/PostGIS
 
 Drop PostgreSQL database
 
@@ -266,7 +232,9 @@ Indexes:
 Access method: heap
 ```
 
-# Create the procedure to calculate nearest neighbors and insert into Natura2000nearest table
+Create the procedure to calculate nearest neighbors and insert into Natura2000nearest table
+
+```
 psql -d sensingclues -c "CREATE OR REPLACE PROCEDURE procedure_calculate_nearest_neighbors()
 LANGUAGE plpgsql
 AS '
@@ -289,6 +257,7 @@ BEGIN
   SELECT 1 AS result;
 END;
 ';"
+```
 
 Call the procedure to calculate nearest neighbors and insert into Natura2000nearest table
 
@@ -321,8 +290,11 @@ Count lines in the CSV file named Natura2000nearest.csv
 
 `wc -l results/natura2000nearest.csv`
 
-OPTIONAL: examine faster approach by rubberbanding Natura2000 polygons first, then running neareston rubberbands and compare results. Use https://postgis.net/docs/ST_ConvexHull.html
+OPTIONAL:
 
+Examine faster approach by rubberbanding Natura2000 polygons first, then running neareston rubberbands and compare results. Use https://postgis.net/docs/ST_ConvexHull.html And/or alternatives like https://postgis.net/docs/ST_Envelope.html and https://postgis.net/docs/ST_OrientedEnvelope.html 
+
+Examine faster approach by running queries in parallel.
 
 ## Visualisation
 

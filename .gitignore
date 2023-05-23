@@ -173,6 +173,7 @@ data/**/*.xls
 data/**/*.zip
 results/**/*.png
 results/**/*.csv
+results/**/*.zip
 .DS_Store
 */.DS_Store
 **/.DS_Store

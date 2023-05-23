@@ -294,6 +294,14 @@ Call the procedure to calculate nearest neighbors and insert into Natura2000near
 
 `psql -d sensingclues -c "CALL procedure_calculate_nearest_neighbors();"`
 
+TODO: Procedure currently ends with ERROR message, no impact on results. Use info from HINT to fix.
+
+```
+ERROR:  query has no destination for result data
+HINT:  If you want to discard the results of a SELECT, use PERFORM instead.
+CONTEXT:  PL/pgSQL function procedure_calculate_nearest_neighbors() line 18 at SQL statement
+```
+
 Count records in the table Natura2000nearest
 
 `psql -d sensingclues -c "SELECT COUNT(*) FROM Natura2000nearest"`

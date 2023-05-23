@@ -8,6 +8,7 @@ shapefile_path = "data/test.shp"
 # Uncomment next line to use the Natura2000 shapefile
 #shapefile_path = 'data/Natura2000_end2021_rev1_epsg3035.shp'
 
+# TODO: for now copy results/natura2000nearest.csv to results/output.csv and remove header and array format
 # Path to the CSV file containing the selected values
 csv_path = 'results/output.csv'
 
@@ -70,11 +71,11 @@ for index, row in df.iterrows():
     ctx.add_basemap(ax, crs=gdf.crs.to_string(), source=ctx.providers.OpenStreetMap.Mapnik, alpha=0.5)
 
     # Save map to image file, just overwrite for now to keep last one only
-    plt.savefig('results/map.png', bbox_inches='tight')
+    plt.savefig('results/map'+str(sitecode)+'.png', bbox_inches='tight')
     # Pause and wait for user confirmation
-    plt.show()
-    user_input = input("Press Enter to continue to the next line (or 'q' to quit): ")
-    if user_input.lower() == 'q':
-        break
+    # plt.show()
+    # user_input = input("Press Enter to continue to the next line (or 'q' to quit): ")
+    # if user_input.lower() == 'q':
+    #     break
 
 print('Done')
